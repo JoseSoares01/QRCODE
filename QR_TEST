@@ -1,0 +1,83 @@
+import qrcode
+
+# Função para calcular o IVA
+def calcular_iva(preco_sem_iva, taxa_iva):
+    return preco_sem_iva * taxa_iva
+
+# Função para gerar o QR Code
+def gerar_qr_code(dados):
+    qr = qrcode.QRCode(
+        version=9,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=5,
+        border=0.25,
+    )
+    qr.add_data(dados)
+    qr.make(fit=True)
+    qr_code = qr.make_image(fill_color="black", back_color="white")
+    return qr_code
+
+def main():
+    # Função para limitar o número de caracteres
+    def limitar_caracteres(input_str, max_length):
+        return input_str[:max_length]
+
+    # Coletar os dados do usuário com limitação de caracteres
+    nif_vendedor = limitar_caracteres(input("Digite o NIF do vendedor: "), 9)
+    nif_empresa = limitar_caracteres(input("Digite o NIF da empresa: "), 9)
+    pais = input("Digite o país (PT, ou UE, por exemplo): ")
+    tipologia = input("Digite a tipologia (FT para fatura, NC para nota de crédito): ")
+    estado = "N"
+    data = limitar_caracteres(input("Digite a data (AAAAMMDD): "), 8)
+    numero_fatura = input("Digite o número da fatura: ")
+    espaco_fiscal = input("Digite o espaço fiscal (PT, ou UE, por exemplo): ")
+
+    # Coletar dados financeiros
+    taxa_iva = float(input("Digite a taxa de IVA aplicada (em percentagem): ")) / 100
+    valor_inicial = float(input("Digite o valor inicial da fatura (sem IVA): "))
+
+    # Calcular montante de IVA e valor total da fatura
+    montante_iva = calcular_iva(valor_inicial, taxa_iva)
+    total_fatura = valor_inicial + montante_iva
+
+    # regra para outros valores que não foram especificados como entrada
+    valor_placeholder = "0.00"
+    
+    # Montar os dados formatados do QR code
+    dados_qr_code = (
+        f"A:{nif_vendedor}*"
+        f"B:{nif_empresa}*"
+        f"C:{pais}*"
+        f"D:{tipologia}*"
+        f"E:{estado}*"
+        f"F:{data}*"
+        f"G:{numero_fatura}*"
+        f"I1:{espaco_fiscal}*"
+        f"I2:{valor_inicial:.2f}*"
+        f"I3:{total_fatura:.2f}*"
+        f"I4:{valor_placeholder}*"
+        f"I5:{valor_placeholder}*"
+        f"I6:{valor_placeholder}*"
+        f"I7:{valor_placeholder}*"
+        f"I8:{valor_placeholder}*"
+        f"M:{valor_placeholder}*"
+        f"N:{valor_placeholder}*"
+        f"O:{valor_placeholder}*"
+        f"P:{valor_placeholder}*"
+        f"Q:{valor_placeholder}*"
+        f"R:{valor_placeholder}*"
+        f"S:{valor_placeholder};"
+    )
+    
+    # Gerar QR code
+    qr_code = gerar_qr_code(dados_qr_code)
+    qr_code.save("fatura_qr_code.png")
+
+    # Imprimir os dados do QR code em texto no console
+    print("Dados do QR Code:")
+    print(dados_qr_code)
+    print("\nQR code gerado com sucesso!")
+
+if __name__ == "__main__":
+    main()
+
