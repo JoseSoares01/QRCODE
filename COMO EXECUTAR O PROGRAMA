@@ -1,0 +1,43 @@
+Passos para criar um executável usando cx_Freeze:
+Instalar o cx_Freeze:
+
+sh
+Copiar código
+pip install cx_Freeze
+Salvar o script:
+Salve o código Python atualizado em um arquivo chamado gerar_qr_code.py.
+
+Criar um arquivo de configuração setup.py:
+Crie um novo arquivo chamado setup.py no mesmo diretório do seu script com o seguinte conteúdo:
+
+python
+Copiar código
+from cx_Freeze import setup, Executable
+
+# Adicione opções conforme necessário
+build_exe_options = {
+    "packages": ["tkinter", "PIL", "qrcode"],
+    "includes": ["tkinter", "PIL", "qrcode"],
+}
+
+# Definições do executável
+executables = [
+    Executable("gerar_qr_code.py", base=None)
+]
+
+# Configuração do setup
+setup(
+    name="GerarQRCode",
+    version="1.0",
+    description="Gerador de QR Code para faturas",
+    options={"build_exe": build_exe_options},
+    executables=executables
+)
+Executar o cx_Freeze:
+Navegue até o diretório onde está o seu arquivo setup.py e execute:
+
+sh
+Copiar código
+python setup.py build
+Verificar o executável:
+O executável será gerado na pasta build. Navegue até essa pasta e procure pelo executável gerar_qr_code.exe. Você pode distribuir este arquivo para os usuários finais.
