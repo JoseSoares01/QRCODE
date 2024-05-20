@@ -1,10 +1,13 @@
-Passos para criar um executável usando cx_Freeze:
-Instalar o cx_Freeze:
+#Obs importante: para usar este executavel se faz necessário a instalação da biblioteca CX_Freeze,
+para tal o executavel do install esta logo abaixo.
 
-sh
-Copiar código
+#Passos para criar um executável usando cx_Freeze:
+
+#Instalar o cx_Freeze:
+    1-Copiar código
+
 pip install cx_Freeze
-Salvar o script:
+    2-Salvar o script:
 Salve o código Python atualizado em um arquivo chamado gerar_qr_code.py.
 
 Criar um arquivo de configuração setup.py:
